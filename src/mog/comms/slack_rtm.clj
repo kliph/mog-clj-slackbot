@@ -1,9 +1,10 @@
 (ns mog.comms.slack-rtm
-  (:require [clojure.core.async :as async :refer [go go-loop]]
+  (:require [cheshire.core :refer [parse-string generate-string]]
             [clj-http.client :as http]
+            [clojure.core.async :as async :refer [go go-loop]]
             [gniazdo.core :as ws]
-            [cheshire.core :refer [parse-string generate-string]]
-            [mog.util :as util]))
+            [mog.util :as util]
+            [taoensso.timbre :as timbre :include-macros true]))
 
 (def ^:private rtm-socket-url
   "https://slack.com/api/rtm.start")
@@ -52,7 +53,7 @@
     (when (clojure.string/blank? url)
       (throw (ex-info "Could not get RTM Websocket URL" {})))
 
-    (println ":: got websocket url:" url)
+    (timbre/debug ":: got websocket url:" url)
 
     ;; start a loop to process event messages
     (go-loop [[ws-in ws-out] (connect-socket url)]
@@ -63,7 +64,7 @@
         ;; we should do something smarter, may be try and reconnect
         (if (nil? val)
           (do
-            (println ":: shutting down")
+            (timbre/info ":: shutting down")
             (shutdown))
           (do
             (if (= port event-out)
@@ -77,7 +78,7 @@
               ;; the websocket has sent us something, figure out if its of interest
               ;; to us, and if it is, send it to the bot's brain
               (do
-                (println ":: incoming:" val)
+                (timbre/debug ":: incoming:" val)
                 ;; When the input has the prefix, process it as a
                 ;; command.
                 (when (can-handle? val prefix)

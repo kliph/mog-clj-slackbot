@@ -1,7 +1,13 @@
 (ns mog.core.slack-test
   (:require [clojure.core.async :as async]
             [clojure.test :refer [deftest testing is]]
-            [mog.core :as core]))
+            [environ.core :refer [env]]
+            [mog.core :as core]
+            [mog.logging :refer [logger]]
+            [mount.core :as mount]
+            [taoensso.timbre :as timbre :include-macros true]))
+
+(mount/start #'logger)
 
 (defn mock-command-loop []
   (let [in (async/chan)

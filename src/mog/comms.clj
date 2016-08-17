@@ -1,15 +1,16 @@
 (ns mog.comms
   (:require [mog.config :refer [config]]
             [mog.util :as util]
-            [mount.core :refer [defstate]]))
+            [mount.core :refer [defstate]]
+            [taoensso.timbre :as timbre :include-macros true]))
 
 (defn make-comm [id config]
   (let [f (util/kw->fn id)]
     (f config)))
 
 (defn inst-comm []
-  (println ":: starting with config:" config)
-  (println ":: building com:" (:comm config))
+  (timbre/info ":: starting with config:" config)
+  (timbre/info ":: building com:" (:comm config))
   (make-comm (:comm config) config))
 
 (defn stop-comm [comm]
