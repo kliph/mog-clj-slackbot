@@ -12,10 +12,14 @@
                  [stylefruits/gniazdo "1.0.0"]
                  [ring/ring-defaults "0.2.1"]
                  [http-kit "2.1.18"]
-                 [mount "0.1.10"]]
-  :plugins [[lein-ring "0.9.7"]]
+                 [mount "0.1.10"]
+                 [com.taoensso/timbre "4.7.0"]]
+  :plugins [[lein-ring "0.9.7"]
+            [lein-environ "1.1.0"]]
   :uberjar-name "mog.jar"
   :main mog.core
   :profiles
-  {:dev {:repl-options {:init-ns mog.repl}}
+  {:dev {:repl-options {:init-ns mog.repl}
+         :env {:mog-log-file  "log/dev.log"}}
+   :test {:env {:mog-log-file "log/test.log"}}
    :uberjar {:aot :all}})
