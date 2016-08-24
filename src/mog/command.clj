@@ -10,6 +10,13 @@
   (timbre/debug (str ":: List is now " @items))
   (str "I've added " item " to the list"))
 
+(defn unknown-command-response [command]
+  (str (rand-nth ["Sorry.  "
+                  "Oops.  "
+                  "My bad.  "
+                  ""])
+       "I don't know how to `" command "`."))
+
 (defn parse-input [input]
   (let [[command content] (string/split input #" ")]
     {:command command
@@ -20,8 +27,4 @@
          content :content :as parsed-input} (parse-input input)]
     (condp = command
       "add" (add-to-list! content)
-      (str (rand-nth ["Sorry.  "
-                      "Oops.  "
-                      "My bad.  "
-                      ""])
-           "I don't know how to `" command "`."))))
+      (unknown-command-response command))))
