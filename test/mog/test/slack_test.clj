@@ -62,17 +62,27 @@
         (is (= ["cheese"] @command/items))))))
 
 (deftest list-command
-  (let [[in-chan out-chan stop-fn] (mock-command-loop)]
-    (testing "list command"
-      (testing "returns the items in the list separated by newlines"
-        (let [item1 "cheese"
-              item2 "lettuce"
-              list-input {:input "list"}
-              output (do (command/add-to-list! item1)
-                         (command/add-to-list! item2)
-                         (async/>!! in-chan list-input)
-                         (async/<!! out-chan))]
-          (is (= (str "Here's the list:\n"
-                      item1 "\n"
-                      item2)
-                 (:mog/response output))))))))
+  (testing "list command"
+    (testing "returns the items in the list separated by newlines"
+      (let [[in-chan out-chan stop-fn] (mock-command-loop)
+            item1 "cheese"
+            item2 "lettuce"
+            list-input {:input "list"}
+            output (do (command/add-to-list! item1)
+                       (command/add-to-list! item2)
+                       (async/>!! in-chan list-input)
+                       (async/<!! out-chan))]
+        (is (= (str "Here's the list:\n"
+                    item1 "\n"
+                    item2)
+               (:mog/response output)))))))
+
+(deftest list-command-empty-list
+  (testing "list command"
+    (testing "returns List is empty. when list is empty"
+      (let [[in-chan out-chan stop-fn] (mock-command-loop)
+            list-input {:input "list"}
+            output (do (async/>!! in-chan list-input)
+                       (async/<!! out-chan))]
+        (is (= "The list is empty."
+               (:mog/response output)))))))

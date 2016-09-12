@@ -11,8 +11,10 @@
   (str "I've added " item " to the list"))
 
 (defn display-list []
-  (str "Here's the list:\n"
-       (string/join "\n" @items)))
+  (if (empty? @items)
+    (str "The list is empty.")
+    (str "Here's the list:\n"
+         (string/join "\n" @items))))
 
 (defn unknown-command-response [command]
   (str (rand-nth ["Sorry.  "
