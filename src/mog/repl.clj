@@ -2,6 +2,7 @@
   (:require [clojure.tools.namespace.repl :as tn]
             [mog.comms :refer [comms]]
             [mog.core :refer [main]]
+            [mog.logging :refer [logger]]
             [mount.core :as mount]))
 
 (defn go []

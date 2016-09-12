@@ -1,7 +1,7 @@
 (ns mog.util)
 
 (defn format-result-for-slack [r]
-  (str r))
+  (str (:mog/response r)))
 
 
 (defn safe-resolve [kw]
@@ -12,7 +12,6 @@
         (catch Exception e
           (require user-ns)
           (ns-resolve user-ns user-fn)))))
-
 
 (defn kw->fn [kw]
   (try
