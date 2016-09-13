@@ -8,7 +8,11 @@
   (timbre/debug (str ":: Adding " item " to list"))
   (swap! items conj item)
   (timbre/debug (str ":: List is now " @items))
-  (str "I've added " item " to the list"))
+  (str "I've added " item " to the list."))
+
+(defn clear-list! []
+  (reset! items [])
+  (str "I've cleared the list."))
 
 (defn display-list []
   (if (empty? @items)
@@ -34,4 +38,5 @@
     (condp = command
       "add" (add-to-list! content)
       "list" (display-list)
+      "clear" (clear-list!)
       (unknown-command-response command))))

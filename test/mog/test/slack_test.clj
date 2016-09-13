@@ -57,7 +57,7 @@
           output (do (async/>!! in-chan input)
                      (async/<!! out-chan))]
       (testing "returns the proper message"
-        (is (= "I've added cheese to the list" (:mog/response output))))
+        (is (= "I've added cheese to the list." (:mog/response output))))
       (testing "adds the item to the list"
         (is (= ["cheese"] @command/items))))))
 
@@ -86,3 +86,36 @@
                        (async/<!! out-chan))]
         (is (= "The list is empty."
                (:mog/response output)))))))
+
+(deftest list-command-clear-with-empty-list
+  (testing "clear command"
+    (testing "clears empty lists"
+      (let [[in-chan out-chan stop-fn] (mock-command-loop)]
+        (let [clear-input {:input "clear"}
+              output (do (async/>!! in-chan clear-input)
+                         (async/<!! out-chan))]
+          (is (= (str "I've cleared the list.")
+                 (:mog/response output))))))))
+
+(deftest list-command-clear
+  (testing "clear command"
+    (testing "clears the list"
+      (let [[in-chan out-chan stop-fn] (mock-command-loop)]
+        (let [item1 "cheese"
+              list-input {:input "list"}
+              output (do (command/add-to-list! item1)
+                         (async/>!! in-chan list-input)
+                         (async/<!! out-chan))]
+          (is (= (str "Here's the list:\n"
+                      item1)
+                 (:mog/response output))))
+        (let [clear-input {:input "clear"}
+              output (do (async/>!! in-chan clear-input)
+                         (async/<!! out-chan))]
+          (is (= (str "I've cleared the list.")
+                 (:mog/response output))))
+        (let [list-input {:input "list"}
+              output (do (async/>!! in-chan list-input)
+                         (async/<!! out-chan))]
+          (is (= "The list is empty."
+                 (:mog/response output))))))))
