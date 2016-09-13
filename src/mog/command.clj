@@ -10,6 +10,10 @@
   (timbre/debug (str ":: List is now " @items))
   (str "I've added " item " to the list"))
 
+(defn clear-list! []
+  (reset! items [])
+  (str "I've cleared the list."))
+
 (defn display-list []
   (if (empty? @items)
     (str "The list is empty.")
@@ -34,4 +38,5 @@
     (condp = command
       "add" (add-to-list! content)
       "list" (display-list)
+      "clear" (clear-list!)
       (unknown-command-response command))))
