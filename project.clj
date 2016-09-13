@@ -15,7 +15,8 @@
                  [mount "0.1.10"]
                  [com.taoensso/timbre "4.7.0"]]
   :plugins [[lein-ring "0.9.7"]
-            [lein-environ "1.1.0"]]
+            [lein-environ "1.1.0"]
+            [com.jakemccrary/lein-test-refresh "0.17.0"]]
   :uberjar-name "mog.jar"
   :main mog.core
   :profiles
