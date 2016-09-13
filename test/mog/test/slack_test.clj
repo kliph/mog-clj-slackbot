@@ -57,7 +57,7 @@
           output (do (async/>!! in-chan input)
                      (async/<!! out-chan))]
       (testing "returns the proper message"
-        (is (= "I've added cheese to the list" (:mog/response output))))
+        (is (= "I've added cheese to the list." (:mog/response output))))
       (testing "adds the item to the list"
         (is (= ["cheese"] @command/items))))))
 
